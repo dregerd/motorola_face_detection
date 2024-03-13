@@ -41,7 +41,21 @@ export default class DatabaseClient {
         }
     }
 
+    /*
+        List all face detection requests
+    */
     async listRequests() {
+        let connection = await this.getConnection();
+        if (!connection) return null;
+
+        const query = "SELECT * FROM face_detection;";
+        try {
+            const result = await connection.all(query);
+            if (!result) return [];
+            return result
+        } catch (err) {
+            this.#logger.error(err);
+        }
     }
 
     async deleteRequest(id) {

@@ -24,7 +24,16 @@ router.post('/create', async (req, res) => {
     }
     res.status(500).send('Something went wrong');
 });
+
+/*
+    List endpoint to get all requests in the system
+*/
 router.get('/list', async (req, res) => {
+    let result = await dbClient.listRequests();
+    if (result) {
+        res.json(result);
+        return;
+    }
     res.status(500).send('Something went wrong');
 });
 
