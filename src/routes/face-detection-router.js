@@ -1,7 +1,9 @@
 import express from 'express';
+import DatabaseClient from '../database/database-client';
 import { CreateLogger } from '../util/logger';
 const router = express.Router();
 const logger = CreateLogger('Face Detection Router');
+const dbClient = new DatabaseClient();
 
 router.post('/create', async (req, res) => {
     logger.info('Creating Face Detection Request', req.body);
