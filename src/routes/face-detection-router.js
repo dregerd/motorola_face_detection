@@ -37,7 +37,20 @@ router.get('/list', async (req, res) => {
     res.status(500).send('Something went wrong');
 });
 
+/*
+    Status endpoint to get a specific request
+    Expects id in the query parameter
+*/
 router.get('/status', async (req, res) => {
+    if (!req.query['id']) {
+        res.status(400).send('Expected id query parameter');
+        return;
+    }
+    let result = await dbClient.getRequest(req.query['id']);
+    if (result) {
+        res.json(result);
+        return;
+    }
     res.status(404).send('Not found');
 });
 
