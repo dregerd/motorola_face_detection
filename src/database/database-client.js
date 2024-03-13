@@ -23,7 +23,22 @@ export default class DatabaseClient {
         }
     }
 
+    /*
+        Insert a new face detection request into the database
+    */
     async createFaceIdRequest(imageLocation) {
+        let connection = await this.getConnection();
+        if (!connection) return null;
+
+        this.#logger.info('Creating Face Detection Request');
+        const query = "INSERT INTO face_detection(image_location) VALUES(:location);";
+        try {
+            // Using a prepared query to sanitize input
+            const result = await connection.run(query, {":location": imageLocation});
+            return {id: result.lastID}; // Return the id of the created item
+        } catch (err) {
+            this.#logger.error(err);
+        }
     }
 
     async listRequests() {
