@@ -58,9 +58,21 @@ export default class DatabaseClient {
         }
     }
 
+    /*
+        Delete a face detection request
+    */
     async deleteRequest(id) {
-    }
+        let connection = await this.getConnection();
+        if (!connection) return null;
 
+        const query = "DELETE FROM face_detection WHERE id = :id;";
+        try {
+            const result = await connection.run(query, {":id": id});
+            return result.changes > 0; // true if we actually change something, otherwise nothing affected
+        } catch (err) {
+            this.#logger.error(err);
+        }
+    }
     async getRequest(id) {
     }
 

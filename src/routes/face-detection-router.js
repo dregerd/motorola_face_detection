@@ -40,7 +40,22 @@ router.get('/list', async (req, res) => {
 router.get('/status', async (req, res) => {
     res.status(404).send('Not found');
 });
+
+/*
+    Deletion endpoint to delete a request
+    Expects id query parameter
+    This endpoint wont cancel an inprogress event if detection service has already picked it up
+*/
 router.delete('/delete', async (req, res) => {
+    if (!req.query['id']) {
+        res.status(400).send('Expected id query parameter');
+        return;
+    }
+    let result = await dbClient.deleteRequest(req.query['id']);
+    if (result) {
+        res.send('Successful deletion');
+        return;
+    }
     res.status(404).send('Not found');
 });
 
