@@ -1,0 +1,105 @@
+openapi: 3.0.0
+servers:
+  - description: Localhost
+    url: http://localhost:3000
+info:
+  version: "1.0.0"
+  title: Motorola Face Detection API
+  description: This api uses a ML algorithm to detect faces in an image
+paths:
+  /create:
+    post:
+      summary: Creates a new face detection request
+      responses:
+        '201':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FaceDetection'
+        '400':
+          description: Invalid Request
+        '500':
+          description: Something went wrong
+      requestBody:
+        description: Image location for the request
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - imageLocation
+              properties:
+                imageLocation:
+                  type: string
+                  example: 'http://path-to-image.jpeg'
+  /list:
+    get:
+      summary: Lists all face detection requests
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FaceDetection'
+        '400':
+          description: Invalid Request 
+        '500':
+          description: Something Went Wrong
+  /status:
+    get:
+      summary: Get the status of a face detection request
+      parameters:
+        - name: id
+          in: query
+          required: true
+          description: id of the detection request
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 'Success'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FaceDetection'
+        '400':
+          description: Invalid Request
+        '500':
+          description: Something went wrong
+  /delete:
+    delete: 
+      summary: Deletes a face detection request
+      responses:
+        '200':
+          description: Successful deletion
+        '400':
+          description: Invalid Request
+        '500':
+          description: Something went wrong
+          
+components:
+  schemas:
+    FaceDetection:
+      type: object
+      required:
+        - id
+        - status
+        - imageLocation
+      properties:
+        id:
+          type: integer
+          example: 1
+        status:
+          type: string
+          enum: ['pending', 'complete']
+          example: 'pending'
+        faceCount:
+          type: integer
+          example: 0
+        imageLocation:
+          type: string
+          example: 'http://path-to-image.jpeg'
