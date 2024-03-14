@@ -108,6 +108,6 @@ export default class DatabaseClient {
             return result.changes > 0; // if we didnt change anything, that means an improper id was given
         } catch (err) {
             this.#logger.error(err);
-    }
+        }
     }
 }

@@ -16,11 +16,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/FaceDetection'
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 1
         '400':
           description: Invalid Request
-        '500':
-          description: Something went wrong
       requestBody:
         description: Image location for the request
         content:
@@ -28,11 +30,11 @@ paths:
             schema:
               type: object
               required:
-                - imageLocation
+                - image_location
               properties:
-                imageLocation:
+                image_location:
                   type: string
-                  example: 'http://path-to-image.jpeg'
+                  example: 'https://s.hdnux.com/photos/51/23/24/10827008/4/1200x0.jpg'
   /list:
     get:
       summary: Lists all face detection requests
@@ -46,9 +48,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/FaceDetection'
         '400':
-          description: Invalid Request 
-        '500':
-          description: Something Went Wrong
+          description: Invalid Request
   /status:
     get:
       summary: Get the status of a face detection request
@@ -66,20 +66,25 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/FaceDetection'
-        '400':
-          description: Invalid Request
-        '500':
-          description: Something went wrong
+        '404':
+          description: Not Found
   /delete:
     delete: 
       summary: Deletes a face detection request
+      parameters:
+        - name: id
+          in: query
+          required: true
+          description: id of the detection request
+          schema:
+            type: integer
       responses:
         '200':
           description: Successful deletion
         '400':
           description: Invalid Request
-        '500':
-          description: Something went wrong
+        '404':
+          description: Not found
           
 components:
   schemas:
@@ -88,18 +93,18 @@ components:
       required:
         - id
         - status
-        - imageLocation
+        - image_location
       properties:
         id:
           type: integer
           example: 1
         status:
           type: string
-          enum: ['pending', 'complete']
+          enum: ['pending', 'complete', 'failed']
           example: 'pending'
-        faceCount:
+        face_count:
           type: integer
-          example: 0
-        imageLocation:
+          example: null
+        image_location:
           type: string
           example: 'http://path-to-image.jpeg'
