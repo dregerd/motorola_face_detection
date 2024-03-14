@@ -32,6 +32,7 @@ router.post('/create', async (req, res) => {
     List endpoint to get all requests in the system
 */
 router.get('/list', async (req, res) => {
+    logger.info('List Request Received');
     let result = await dbClient.listRequests();
     if (result) {
         res.json(result);
@@ -41,10 +42,11 @@ router.get('/list', async (req, res) => {
 });
 
 /*
-    Status endpoint to get a specific request
+    Get endpoint to get a specific request
     Expects id in the query parameter
 */
-router.get('/status', async (req, res) => {
+router.get('/get', async (req, res) => {
+    logger.info('Get Request Received', req.query);
     if (!req.query['id']) {
         res.status(400).send('Expected id query parameter');
         return;
@@ -63,6 +65,7 @@ router.get('/status', async (req, res) => {
     This endpoint wont cancel an inprogress event if detection service has already picked it up
 */
 router.delete('/delete', async (req, res) => {
+    logger.info('Delete Request Received', req.query);
     if (!req.query['id']) {
         res.status(400).send('Expected id query parameter');
         return;

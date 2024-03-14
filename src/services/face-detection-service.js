@@ -28,6 +28,7 @@ FaceDetectionRequestEvent.on('new', async ({id}) => {
         await faceapi.loadSsdMobilenetv1Model('http://localhost:3000/models') // Load models
         const opts = new faceapi.SsdMobilenetv1Options({ minConfidence: 0.5 }); // Configure detection params
         const detections = await faceapi.detectAllFaces(img, opts); // Run Detection, this locks the entire thread because tensorflow is not installed (could not get it to work)
+        logger.info(`Detection complete, ${detections.length} faces detected`);
         await dbClient.updateStatus(id, 'complete', detections.length); // Update the status and face count
     } catch (err) { // Bad Image
         logger.warn(`Failed to process image: ${request.image_location}`, err);
