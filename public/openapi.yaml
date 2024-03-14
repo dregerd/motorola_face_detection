@@ -49,9 +49,9 @@ paths:
                   $ref: '#/components/schemas/FaceDetection'
         '400':
           description: Invalid Request
-  /status:
+  /get:
     get:
-      summary: Get the status of a face detection request
+      summary: Get an individual detection request
       parameters:
         - name: id
           in: query
